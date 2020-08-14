@@ -1,0 +1,87 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"><html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>材料生成系统-管理员登录页</title>
+    <link rel="dao icon"  href="../img/favicon.ico" type="image-x.icon"/>
+    <link rel="stylesheet" type="text/css" href="../css/base.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../js/base.js"></script>
+
+    <title>材料生成系统-个人信息修改页面</title>
+    <script type="text/javascript">
+        $(document).ready(function ()
+        {
+            $("#form2").submit(function ()
+            {
+                $.ajax({
+                    type: "POST",//方法类型
+                                 //dataType: "JSON",//预期服务器返回的数据类型
+                    url: "../list/update_person" ,//url
+                    data: $('#form2').serialize(),
+                    success: function (result) {
+
+                        console.log(result);//打印服务端返回的数据(调试用)
+                        if (result.resultCode == 200) {
+                            alert("SUCCESS");
+                        }
+                        ;
+                    },
+                    error : function() {
+                        alert("密码没有被修改");
+                    }
+                });
+                //中间做一些ajax数据交互
+                    alert("信息修改成功，如密码被修改系统将注销登录")
+                window.location.reload();
+                    return false;
+            });
+
+        })
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-5 col-sm-offset-1">
+<br>
+                <h4>个人信息修改</h4>
+                <br>
+                <form role="form" id="form2" method="post" action="#">
+                    <div class="input-group">
+                        <span class="input-group-addon">账号</span>
+                        <input type="text" name="id" required="required" value="${person.id}" readonly="readonly" class="form-control">
+                    </div>
+                    <br>
+                    <div class="input-group">
+                        <span class="input-group-addon">密码</span>
+                        <input type="text" name="password" value="${person.password}" required="required" autofocus="autofocus" class="form-control">
+                    </div>
+                    <br>
+                    <div class="input-group">
+                        <span class="input-group-addon">昵称</span>
+                        <input type="text" name="name" required="required" value="${person.name}" class="form-control">
+                    </div>
+
+                    <br>
+                    <div class="input-group pull-right">
+
+                        <button type="submit" class="btn btn-success"  id="sub" class="form-control">Submit</button>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

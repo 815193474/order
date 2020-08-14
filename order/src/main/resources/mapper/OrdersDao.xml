@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="vip.bigeye.order.Dao.OrdersDao">
+    <insert id="insert" parameterType="vip.bigeye.order.entity.Orders" useGeneratedKeys="true" >
+        <selectKey keyProperty="id" resultType="java.lang.String" order="BEFORE">
+            select replace(UUID(),'-','') from dual
+        </selectKey>
+        insert into orders
+        (`o_id`,`o_date`, `o_client`,`o_product`,`o_parcel`,`o_parcel_number`,`o_number`,`o_require`,
+        `o_client_note`,`o_collect`,`o_person`,`o_send_date`,`o_factory_note`,`o_returns`,
+        `o_factory_username`,`o_factory_name`, `o_business_username`,`o_business_name`)
+        values
+        (#{id},#{ordersDate},#{client},#{product},#{parcel},#{parcelNumber},#{ordersNumber},#{ordersRequire},#{clientNote},
+        #{collect},#{person},#{sendDate},#{factoryNote},#{returns},#{factoryUsername},#{factoryName},
+        #{businessUsername},#{businessName});
+    </insert>
+
+    <select id="findById"  resultType="vip.bigeye.order.entity.Orders" >
+        select o_id as id, o_date as ordersDate,o_client as client,o_product as product,
+        o_parcel as parcel,o_parcel_number as parcelNumber,o_number as ordersNumber,o_require as ordersRequire,o_client_note
+         as clientNote ,o_collect as collect,o_person as person ,o_send_date as sendDate,o_factory_note as factoryNote,
+         o_returns as returns ,o_factory_username as factoryUsername,o_factory_name as factoryName,o_business_name as
+         businessName,o_business_username as businessUsername from orders where o_id= #{id} ;
+    </select>
+
+
+<!--根据商家、厂家、时间、订单状态查询-->
+    <select id="findByParam"  resultType="vip.bigeye.order.entity.Orders"  >
+        select o_id as id,o_date as ordersDate,o_client as client,o_product as product,
+        o_parcel as parcel,o_parcel_number as parcelNumber,o_number as ordersNumber,o_require as ordersRequire,o_client_note
+         as clientNote ,o_collect as collect,o_person as person ,o_send_date as sendDate,o_factory_note as factoryNote,
+         o_returns as returns ,o_factory_username as factoryUsername,o_factory_name as factoryName,o_business_name as
+         businessName,o_business_username as businessUsername from orders where (o_factory_username=#{factoryUsername} or #{factoryUsername} is null )
+          and (o_business_username=#{businessUsername} or #{businessUsername} is null) and (o_returns=#{returns} or #{returns} is null)
+          and (o_date &gt; #{startTime} or #{startTime} is null) and (o_date &lt; #{stopTime} or #{stopTime} is null) order by o_date desc;
+    </select>
+
+
+
+    <update id="update" parameterType="vip.bigeye.order.entity.Orders">
+     update orders set o_date =#{ordersDate},o_client =#{ client},o_product =#{ product},
+        o_parcel =#{ parcel},o_parcel_number =#{ parcelNumber},o_number =#{ ordersNumber},o_require =#{ ordersRequire},o_client_note
+         =#{ clientNote },o_collect =#{ collect},o_person =#{ person },o_send_date =#{ sendDate},o_factory_note =#{ factoryNote},
+         o_returns =#{ returns },o_factory_username =#{ factoryUsername},o_factory_name =#{ factoryName},o_business_name =#{
+         businessName},o_business_username =#{ businessUsername } where  o_id =#{ id};
+    </update>
+
+    <delete id="deleteById" parameterType="String">
+        delete  from orders where o_id =#{id};
+    </delete>
+
+    <select id="findByReturns" parameterType="String" resultType="vip.bigeye.order.entity.Orders">
+        select * from orders where o_returns=#{returns};
+    </select>
+    <select id="findAll" resultType="vip.bigeye.order.entity.Orders">
+        select * from orders ;
+    </select>
+    <select id="findByTime" resultType="vip.bigeye.order.entity.Orders">
+        select * from orders where o_date > #{time};
+    </select>
+
+    <select id="findByBusiness" parameterType="String" resultType="vip.bigeye.order.entity.Orders">
+        select * from orders where o_business_username=#{business};
+    </select>
+
+    <select id="findByFactory" parameterType="String" resultType="vip.bigeye.order.entity.Orders">
+        select * from orders where o_factory_username=#{factory};
+    </select>
+    <select id="findByTimeAndBusiness" resultType="vip.bigeye.order.entity.Orders">
+        select * from orders where o_date > #{time} and o_business_username=#{business};
+    </select>
+    <select id="findByTimeAndFactory" resultType="vip.bigeye.order.entity.Orders">
+        select * from orders where o_date > #{time} and o_factory_username=#{factory};
+    </select>
+    <select id="findByReturnsAndBusiness" parameterType="String" resultType="vip.bigeye.order.entity.Orders">
+        select * from orders where o_returns=#{returns} and o_business_username=#{business};
+    </select>
+    <select id="findByReturnsAndFactory" parameterType="String" resultType="vip.bigeye.order.entity.Orders">
+        select * from orders where o_returns=#{returns} and o_factory_username=#{factory};
+    </select>
+
+
+    <!--根据商家、厂家、时间、订单状态查询-->
+    <select id="findByMap"  resultType="vip.bigeye.order.entity.Orders" parameterType="Map" >
+        select o_id as id,o_date as ordersDate,o_client as client,o_product as product,
+        o_parcel as parcel,o_parcel_number as parcelNumber,o_number as ordersNumber,o_require as ordersRequire,
+        o_client_note as clientNote,o_collect as collect,o_person as person,o_send_date as sendDate,
+        o_factory_note as factoryNote,o_returns as returns,o_factory_username as factoryUsername,
+        o_factory_name as factoryName,o_business_name as businessName,o_business_username as businessUsername from orders
+        where (o_factory_username=#{factoryUsername} or #{factoryUsername} is null )
+          and (o_business_username=#{businessUsername} or #{businessUsername} is null) and (o_returns=#{returns} or #{returns} is null)
+          and (o_date &gt; #{startTime} or #{startTime} is null) and (o_date &lt; #{stopTime} or #{stopTime} is null) order by o_date desc  limit   #{currIndex} ,#{pageSize} ;
+    </select>
+</mapper>

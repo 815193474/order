@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="vip.bigeye.order.Dao.UserDao">
+
+
+    <insert id="insert" parameterType="vip.bigeye.order.entity.User" >
+
+        insert into user
+        (`u_username`, `u_name`,`u_password`,`u_phone`,`u_type`)
+        values
+        (#{username},#{name},#{password},#{phone},#{type})
+    </insert>
+
+  <!--uuid主键
+    <insert id="insert" parameterType="User" useGeneratedKeys="true">
+        <selectKey keyProperty="u_username" resultType="java.lang.String" order="BEFORE">
+            select replace(UUID(),'-','') from dual
+        </selectKey>
+        insert into album
+        (`a_name`, `a_date`,`a_permission`,`a_theme`,`a_u_username`)
+        values
+        (#{a_name},#{a_date},#{a_permission},#{a_theme},#{a_u_useranme})
+    </insert>
+    -->
+
+    <select id="findByUsername"  resultType="vip.bigeye.order.entity.User" >
+        select u_username as username,u_password as password,u_type as type,
+        u_phone as phone,u_name as name from user u where u.u_username= #{username};
+    </select>
+
+    <select id="findAll"  resultType="vip.bigeye.order.entity.User"  >
+        select u_username as username,u_password as password,u_type as type,
+        u_phone as phone,u_name as name from user where u_type=#{type} limit #{currIndex},#{pageSize} ;
+    </select>
+
+    <select id="find"  resultType="vip.bigeye.order.entity.User">
+        select u_username as username,u_password as password,u_type as type,
+        u_phone as phone,u_name as name from user where u_type=#{type };
+    </select>
+
+    <update id="update" parameterType="vip.bigeye.order.entity.User">
+        update user set u_password=#{password} ,u_type=#{type},
+        u_phone=#{phone},u_name=#{name} where u_username=#{username}
+    </update>
+
+    <delete id="deleteByUsername" parameterType="String">
+        delete  from user where u_username=#{username};
+    </delete>
+
+</mapper>

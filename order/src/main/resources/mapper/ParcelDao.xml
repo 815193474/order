@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="vip.bigeye.order.Dao.ParcelDao">
+
+
+    <insert id="insert" parameterType="vip.bigeye.order.entity.Parcel" >
+
+        insert into parcel (`p_id`,`p_name`) values (null,#{name});
+    </insert>
+
+    <!--uuid主键
+      <insert id="insert" parameterType="User" useGeneratedKeys="true">
+          <selectKey keyProperty="u_username" resultType="java.lang.String" order="BEFORE">
+              select replace(UUID(),'-','') from dual
+          </selectKey>
+          insert into album
+          (`a_name`, `a_date`,`a_permission`,`a_theme`,`a_u_username`)
+          values
+          (#{a_name},#{a_date},#{a_permission},#{a_theme},#{a_u_useranme})
+      </insert>
+      -->
+    <select id="findAll"  resultType="vip.bigeye.order.entity.Parcel" parameterType="int" >
+        select p_name as name from parcel limit #{currIndex},#{pageSize} ;
+    </select>
+    <select id="find"  resultType="vip.bigeye.order.entity.Parcel"  >
+        select p_name as name from parcel  ;
+    </select>
+
+    <delete id="deleteByName" parameterType="String">
+        delete  from parcel where p_name=#{name};
+    </delete>
+
+</mapper>

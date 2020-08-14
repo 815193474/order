@@ -1,0 +1,135 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>订单管理系统-登录页</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="dao icon"  href="../img/favicon.ico" type="image-x.icon"/>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css"> 
+    <style type="text/css">
+        .container{
+            height: 100%;
+            text-align: center;
+            margin: 10% auto;
+        }
+    
+    </style>
+
+    <script type="text/javascript">
+        //初始化
+        window.onload=function(){
+            var btnLogin = document.getElementById("login");
+            //为登录按钮添加事件
+            btnLogin.onclick=function(){
+                Login();
+            };
+
+        }
+        function Login(){
+            var username=document.getElementById("username");
+            var password = document.getElementById("password");
+            var yan = document.getElementById("check");
+            var type = document.getElementById("type");
+
+            $.ajax({
+                type: "POST",
+                url: "../login",
+                data: "username="+username.value+"&password="+password.value+"&yan="+yan.value+"&type="+type.value,
+                dataType:"text",
+
+                success: function (data) {
+                    if(data!=null&&data=="successSuper"){
+                        alert("登录成功,即将跳转个人首页");
+                        window.location.href="../super/superIndex";
+                    }else if (data!=null&&data=="successBusiness") {
+                        alert("登录成功,即将跳转个人首页");
+                        window.location.href="../business/businessIndex";
+                    }else if (data!=null&&data=="successFactory") {
+                        alert("登录成功,即将跳转个人首页");
+                        window.location.href="../factory/factoryIndex";
+
+                    }else {
+                        alert(data);
+                    }
+                }
+            });
+        }
+
+    </script>
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body style="background-image: url(../img/bg1.jpg)">
+    <div class="container">
+        <div class="container-fluid">
+            <div class="row">
+            <div class="col-sm-offset-4 col-sm-4">
+                <div class="form-group">
+                    <h3 style="color: white;">订单管理系统</h3>
+                    <br>
+                </div>              
+            </div>
+        </div>
+        <div class="row ">
+            <div class=" col-sm-offset-4 col-sm-4">
+                <form role="form" method="POST" action="../action/index">
+                    <div class="input-group">
+                        <span class="input-group-addon">用户名</span>
+                        <input id="username" type="text" class="form-control" name="username" required="required" autofocus="autofocus">
+                    </div>
+                    <br>
+                    <div class="input-group">
+                        <span class="input-group-addon">密&nbsp;&nbsp;&nbsp;码</span>
+                        <input type="password" id="password" class="form-control"  required="required" name="password">
+                    </div>
+                    <br>
+                    <div class="input-group">
+                        <span class="input-group-addon">身&nbsp;&nbsp;&nbsp;份</span>
+                        <select class="form-control" id="type" name="type">
+                            <option value="admin">平台运营</option>
+                            <option value="business">商家</option>
+                            <option value="factory">厂家</option>
+
+                        </select>
+
+                    </div>
+                    <br>
+                    <div class="input-group ">
+
+                        <img  src="../check/c"  id="validateCodeImg" onclick="changeImg()">
+
+
+                    </div>
+                    <br>
+                    <div class="input-group">
+                        <span class="input-group-addon">验证码</span>
+                        <input type="text" name="yan" id="check" class="form-control" required="required" placeholder="请输入验证码">
+                    </div>
+                    <br>
+                    <div class="input-group pull-right">
+                    
+                        <button type="button" id="login" class="btn btn-success form-control">login</button>
+
+                    </div>
+                    <br>
+                    <br>
+
+                    <div class="input-group pull-center center-block">
+                    
+<span class="help-block "><p style="color: white;">Copyright © VX:a815193474</p></span>
+                        
+
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+</body>
+<script>
+    function changeImg() {
+        document.getElementById("validateCodeImg").src="../check/c?"+Math.random();
+        //在末尾加Math.random()的作用：<br>如果两次请求地址一样，服务器只会处理第一次请求，第二次请求返回内容和第一次一样。或者说如果地址相同，第一次请求时，将自动缓存，导致第二次不会重复请求了。Math.random()是调用javascript语法中的数学函数，能够产生随机数。<br>末尾加Math.random()使每次请求地址不相同，服务器每次都去做不同的响应。也可以使用new date()时间戳的形式作为参数传递。
+    }
+</script>
+</html>

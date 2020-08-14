@@ -1,0 +1,87 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"><html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>订单管理系统</title>
+  <link rel="dao icon"  href="../img/favicon.ico" type="image-x.icon"/>
+  <link rel="stylesheet" type="text/css" href="../css/base.css">
+  <style type="text/css">
+
+  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="../js/base.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function ()
+    { 
+  $("#form3").submit(function () 
+        {
+             $.ajax({
+                type: "POST",//方法类型
+                   // dataType: "JSON",//预期服务器返回的数据类型
+                    url: "../insert/parcel" ,//url
+                    data: $('#form3').serialize(),
+                    success: function (result) {
+                      alert("数据录入成功");
+                        console.log(result);//打印服务端返回的数据(调试用)
+                        if (result.resultCode == 200) {
+                            alert("SUCCESS");
+                        }
+                        ;
+                    },
+                    error : function() {
+                      alert("数据录入出错");
+                    }
+                });
+            //中间做一些ajax数据交互
+             
+             document.getElementById("form3").reset();
+             return false;
+         
+        });
+
+    })
+
+           
+    </script>
+</head>
+<body >
+<div class="container">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-offset-4 col-sm-4">
+                <div class="form-group">
+                   <h4>新增快递公司</h4>
+                        <br>
+                </div>
+            </div>
+        </div>
+        <div class="row ">
+            <div class=" col-sm-offset-4 col-sm-4">
+                <form id="form3" role="form" method="POST" action="#">
+                    
+                    <br>
+
+                    <div class="input-group">
+                        <span class="input-group-addon">昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称</span>
+                        <input type="text" class="form-control" name="name" required="required" autofocus="autofocus">
+                    </div>
+                    <br>
+                    
+              
+                     <div class="input-group pull-right">
+            <button type="submit" class="btn btn-success form-control">submit</button>
+          </div>
+                    <br>
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

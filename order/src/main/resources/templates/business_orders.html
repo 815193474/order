@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en"
+	  xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>订单管理系统</title>
+	<link rel="dao icon"  href="../static/img/favicon.ico" type="image-x.icon"/>
+	<link rel="stylesheet" type="text/css" href="../static/css/base.css">
+	<style type="text/css">
+	</style>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../static/js/base.js"></script>
+<title>订单管理系统</title>
+</head>
+<body>
+<div class="container">
+	<div class="container-fluid">
+		<div class="row">
+
+			<div class=" col-sm-11 ">
+				<div class="col-sm-3 ">
+					
+					<div class="input-group">
+						<span class="input-group-addon">起始</span>
+						<input type="date" id="startTime" class="form-control"  >
+					
+					</div>
+					 
+				</div>
+				<div class="col-sm-3 col-sm-offset-1 ">
+					<div class="input-group">
+					<span class="input-group-addon ">结束</span>
+					<input type="date"  id="stopTime" class="form-control"  >
+					
+					</div> 
+				</div>
+				<div class=" col-sm-3  col-sm-offset-1">
+					<div class="input-group">
+							<span class="input-group-addon ">厂家</span>
+				<select id="factoryUsername" class="form-control" >
+					<option value="">所有</option>
+					<option th:each="user:${factorys}" th:value="${user.username}" th:text="${user.name}"></option>
+				</select>
+					
+					</div>
+					
+				</div>
+				<div class=" col-sm-3  col-sm-offset-1" style="display: none;">
+					<div class="input-group">
+						<span class="input-group-addon ">厂家</span>
+						<select id="businessUsername" class="form-control" name="batch_id">
+							<option value="">所有</option>
+							<option value="${b.batch_id}">${b.batch_id}</option>
+						</select>
+					<input id="returns" th:value="${returns}"/>
+					</div>
+
+				</div>
+				<div class="col-sm-1 pull-right ">
+					<div class="input-group">
+					<input type="button" value="检索" class="btn btn-primary" onclick="query()">
+					
+					</div> 
+				</div>
+			</div>
+	
+		
+		</div>
+
+		<div id="box">
+			<div class="row" >
+				<div class="col-sm-11 ">
+
+					<br>
+
+					<div >
+						<table class="table table-bordered table-hover  text-nowrap" >
+
+							<thead>
+							<tr><td>订单日期</td><td>客户信息</td><td>产品</td><td>数量</td><td >交易备注</td><td>是否代收</td><td >产品负责人</td>
+								<td>发货日期</td>
+								<td>快递名称</td>
+								<td>快递单号</td>
+								<td>厂家</td>
+								<td>厂家备注</td>
+
+								<td colspan="2">操作</td></tr>
+							</thead>
+							<tbody>
+							<tr th:each="b:${orders}">
+								<td th:text="${b.ordersDate}"></td>
+								<td th:text="${b.client}"></td>
+								<td th:text="${b.product}"></td>
+								<td th:text="${b.ordersNumber}"></td>
+								<td th:text="${b.clientNote}"></td>
+								<td th:text="${b.collect}"></td>
+								<td th:text="${b.person}"></td>
+								<td th:text="${b.sendDate}"></td>
+								<td th:text="${b.parcel}"></td>
+								<td th:text="${b.parcelNumber}"></td>
+								<td th:text="${b.factoryName}"></td>
+								<td th:text="${b.factoryNote}"></td>
+
+								<td>
+									<a  class="btn-sm btn-info" th:onclick="showModal([[${b.id}]])";>完善</a>
+								</td>
+								<td>
+									<a class="btn-sm btn-danger" th:onclick=showAtRight('../delete/orders?id='+[[${b.id}]])>删除</a>
+								</td>
+
+							</tr>
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="row ">
+				<div class="col-sm-4 col-sm-offset-4">
+
+					<ul class="pagination pull-left">
+						<li> <a   href="###" th:onclick=showAtRight('../orders/select?pageNo='+[[${previousPageNo}]]+'&returns='+[[${returns}]]) type="text/html">&laquo;</a> </li>
+						<li> <a  href="###" th:text="${totalPages}"></a></li>
+						<li> <a  href="###" th:text="${totalRecords}"></a></li>
+						<li> <a  href="###" th:onclick=showAtRight('../orders/select?pageNo='+[[${nextPageNo}]]+'&returns='+[[${returns}]]) type="text/html">&raquo;</a></li>
+					</ul>
+
+				</div>
+			</div>
+		</div>
+
+
+		</div>
+	</div>
+		
+</div>
+</div>
+<div class="modal inmodal" id="myModalUpdate" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog">
+		<div class="modal-content animated bounceInRight">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span>
+				</button>
+				<i class="fa fa-laptop modal-icon"></i>
+				<h4 class="modal-title">完善订单信息</h4>
+				<small class="font-bold"></small>
+			</div><form action="#" id="form1">
+			<div class="modal-body"><br>
+				<div class="form-group">
+
+					<div style="display:none;">
+
+						<input type="text" name="id" id="id">
+
+					</div>
+					<div class="input-group">
+						<span class="input-group-addon">客户信息</span>
+						<input type="text" name="client" id="client" readonly="readonly" class="form-control" autofocus="autofocus"/>
+					</div>
+					<br>
+					<div class="input-group">
+						<span class="input-group-addon">产品</span>
+						<input type="text" readonly="readonly" id="product" class="form-control" name="product">
+					</div><br>
+
+					<div class="input-group">
+						<span class="input-group-addon">数量</span>
+						<input type="text" readonly="readonly" id="ordersNumber" class="form-control" name="ordersNumber">
+					</div><br>
+
+
+					<div class="input-group">
+						<span class="input-group-addon">发货要求</span>
+						<input  type="text" class="form-control" id="ordersRequire" readonly="readonly" name="ordersRequire">
+					</div><br>
+
+					<div class="input-group">
+						<span class="input-group-addon">交易备注</span>
+						<input  type="text" readonly="readonly" id="clientNote" class="form-control" name="clientNote">
+					</div><br>
+
+					<div class="input-group">
+						<span class="input-group-addon">产品负责人</span>
+						<input readonly="readonly" type="text" class="form-control"  id="person" name="person"/>
+					</div><br>
+
+					<div class="input-group">
+						<span class="input-group-addon">商家</span>
+						<input readonly="readonly" type="text" class="form-control"  id="businessName" name="businessName"/>
+					</div><br>						<small>已发货请填写send 未发货请填写notSend 已退货请填写returned 非法输入将不能提交</small>
+
+					<div class="input-group">
+
+						<span class="input-group-addon">发货状态</span>
+						<input type="text" name="returns" id="returnses"  class="form-control"  placeholder="send表示已发货，notSend表示未发货，returned表示退回" />
+					</div><br>
+					<div class="input-group">
+						<span class="input-group-addon">是否代收</span>
+						<input type="text" name="collect" id="collect" value="否" class="form-control"  placeholder="不填默认为否，如是请填写由何人代收" />
+					</div><br>
+					<div class="input-group">
+						<span class="input-group-addon ">快递公司</span>
+						<input  type="text" class="form-control"  id="parcel" name="parcel"/>
+
+					</div><br>
+
+					<div class="input-group">
+						<span class="input-group-addon">快递单号</span>
+						<input  type="text" class="form-control"  id="parcelNumber" name="parcelNumber"/>
+					</div><br>
+
+					<div class="input-group">
+						<span class="input-group-addon">厂家备注</span>
+						<input  type="text" class="form-control"  id="factoryNote" name="factoryNote"/>
+					</div><br>
+
+
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-primary" >保存</button>
+				<button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+			</div></form>
+		</div><small class="font-bold">
+	</small></div><small class="font-bold">
+</small></div>
+</body>
+<script>
+	$("#form1").submit(function () {
+		$.ajax({
+			type: "POST",//方法类型
+			// dataType: "JSON",//预期服务器返回的数据类型
+			url: "../update/orders",//url
+			data: $('#form1').serialize(),
+			success: function (result) {
+				alert("订单更新成功");
+				console.log(result);//打印服务端返回的数据(调试用)
+				if (result.resultCode == 200) {
+					alert("SUCCESS");
+				}
+				;
+			},
+			error: function () {
+				alert("数据录入出错");
+
+			}
+		});
+		//中间做一些ajax数据交互
+
+		return false;
+
+	});
+</script>
+</html>

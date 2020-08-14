@@ -1,0 +1,140 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"><html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>订单管理系统</title>
+    <link rel="dao icon"  href="../img/favicon.ico" type="image-x.icon"/>
+    <link rel="stylesheet" type="text/css" href="../css/base.css">
+    <style type="text/css">
+
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../js/base.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function ()
+        { 
+    $("#form1").submit(function () 
+            {
+                 $.ajax({
+                        type: "POST",//方法类型
+                    //    dataType: "JSON",//预期服务器返回的数据类型
+                        url: "../insert/base" ,//url
+                        data: $('#form1').serialize(),
+                        success: function (result) {
+                             alert("数据录入成功");
+                            console.log(result);//打印服务端返回的数据(调试用)
+                            if (result.resultCode == 200) {
+                                alert("SUCCESS");
+                            }
+                            ;
+                        },
+                        error : function() {
+                             alert("数据录入出错");
+                        }
+                    });
+                //中间做一些ajax数据交互
+                
+                 document.getElementById("form1").reset();
+                 return false;
+             
+            });
+
+        })
+</script>
+<title>新增订单</title>
+</head>
+<body>
+    <div class="container">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-11 ">
+                    <h4>订单信息填写</h4>
+                    <br>
+                    <form id="form1" method="post" action="###" role="form">
+                        <div style="display:none;">
+                        <input type="text" name="teacher_1" value="null"/>
+                        <input type="text" name="teacher_2" value="null"/>
+                        <input type="text" name="className" value="${ls}">
+                        </div>
+                        <div class="input-group">
+                        <span class="input-group-addon">客户信息</span>
+                        <input type="text" name="name_b" readonly = "readonly" required="required" value="${b.name }" class="form-control" />
+                        </div>
+
+                        <br>
+                        <div class="input-group">
+                        <span class="input-group-addon">产品</span>
+                        <input type="text" name="name_b" readonly = "readonly" required="required" value="${b.name }" class="form-control" />
+                        </div>
+
+                        <br>
+
+                        <div class="input-group">
+                        <span class="input-group-addon">数量</span>
+                        <input type="text" readonly = "readonly" required="required" class="form-control" name="nation">
+                        </div><br>
+
+                        <div class="input-group">
+                        <span class="input-group-addon">是否代收</span>
+                        <input type="text" name="birthday" class="form-control"  placeholder="不填默认为否，如是请填写由何人代收" />
+                        </div><br>
+
+                        <div class="input-group">
+                        <span class="input-group-addon">发货时间</span>
+                        <input required="required" type="date" class="form-control" name="entryWorkTime">
+                        </div><br>
+
+                        <div class="input-group">
+                        <span class="input-group-addon">交易备注</span>
+                        <input required="required" type="text" class="form-control" readonly = "readonly" name="nativePlace">
+                        </div><br>
+
+                        <div class="input-group">
+                        <span class="input-group-addon">产品负责人</span>
+                        <input required="required" type="text" class="form-control" readonly = "readonly" name="education"/>
+                        </div><br>
+
+                        <div class="input-group">
+                        <span class="input-group-addon">快递公司</span>
+                        <select name="batch_id" class="form-control">
+                            <option>选择快递</option>
+                            <c:forEach items="${batch}" var="b" >
+                            <option  value="${b.batch_id }">${b.batch_id }
+                            </option>
+                            </c:forEach>
+                        </select>
+                        </div><br>
+
+                        <div class="input-group">
+                        <span class="input-group-addon">快递单号</span>
+                        <input required="required" type="text" class="form-control" name="idCardNumber">
+                        </div><br>
+
+                        <div class="input-group">
+                        <span class="input-group-addon">厂家备注</span>
+                        <input type="text" required="required" name="address" class="form-control">
+                        </div><br>
+
+
+                        
+                        <div class="input-group pull-right">
+                        <br>
+                            <button type="submit" class="btn btn-success form-control">submit</button>
+
+                        </div>
+                            <br>
+                    <br>
+                    <br><br>
+                </form>
+                </div>
+            </div>
+        </div>
+    
+    </div>
+
+</body>
+</html>

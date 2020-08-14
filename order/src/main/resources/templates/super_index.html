@@ -1,0 +1,480 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>订单管理系统</title>
+    <link rel="dao icon"  href="../img/favicon.ico" type="image-x.icon"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../css/base.css">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css"> 
+  <style type="text/css">
+       
+ li i {
+      cursor:pointer;
+      font-style:normal;
+  }
+  
+  </style> 
+    <script type="text/javascript" src="../js/base.js"></script>
+
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head> 
+<body>
+     <div class="navbar navbar-fixed-top navbar-inverse" style="background-color: #d9edf7;border: none;">  
+      <div class="container-fluid">  
+        <div class="nav-logo"  >
+          <a href="###"  title="点击修改个人信息" onclick="showAtRight('../list/person');">&nbsp;&nbsp;&nbsp;&nbsp;<i class="iconfont icon-icon_zhanghao" title="超级管理员">&nbsp;&nbsp;</i><i th:text="${user.name}"></i>&nbsp;&nbsp;</a>
+        </div>
+        <div class="navbar-header">  
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navBar">  
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>  
+        <div class="collapse navbar-collapse " id="navBar" >  
+          <ul class="nav navbar-nav navbar-left">
+
+                    <li ><a href="javascript:void(0)"  onclick="flush()"><i class="iconfont icon-reload " title="刷新至首页"></i>&nbsp;&nbsp;首页</a></li>
+
+          </ul>  
+          <ul class="nav navbar-nav navbar-right">
+                    <li tyle="margin-right: 50px;" ><a href="javascript:alert('需要产品定制请联系微信a815193474')"  ><i  class="iconfont icon-dingzhi" >&nbsp;&nbsp;</i>产品定制
+                    </a></li>
+       
+                 
+
+                    <li style="margin-right: 25px;"><a href="../loginout" ><i  class="iconfont icon-poweroff" title="注销登录"></i>&nbsp;&nbsp;注销
+                    </a></li>
+          </ul>  
+        </div>
+      </div>
+    </div>  
+<br><br><br><br><br>
+   
+            
+        <div class="container-fluid">
+            <div class="row">
+
+                <div class="col-sm-2" >
+                    
+     <ul id="left" class="list-group" >   
+     <li class="list-group-item active"><i  class="iconfont icon-dianpu" >&nbsp;&nbsp;</i>系统管理</li>  
+        <li id="left_li_1" class="list-group-item" onclick="show()"><i  class="iconfont icon-yingyongguanli" >&nbsp;&nbsp;</i><i id="menu_1">数据管理</i> </li>
+        <li id="select_1" class="list-group-item" style="display:none;"> 
+           <ul class="list-group" >  
+               <li class="list-group-item"><a href="###" onclick="showAtRight('../orders/select?returns=send&pageNo=1'); "><i  class="iconfont icon-team" >&nbsp;</i>已发货订单</a></li>
+               <li class="list-group-item"><a href="###" onclick="showAtRight('../orders/select?returns=notSend&pageNo=1'); "  ><i  class="iconfont icon-team" >&nbsp;</i>未发货订单</a></li>
+
+                 <li class="list-group-item"><a href="###" onclick="showAtRight('../user/list?pageNo=1&type=factory'); " > <i  class="iconfont icon-team" >&nbsp;</i>查看厂家</a></li>
+
+                 <li class="list-group-item"><a href="###" onclick="showAtRight('../user/list?pageNo=1&type=business');"> <i  class="iconfont icon-team" >&nbsp;</i>查看商家</a></li>
+               <li class="list-group-item"><a href="###" onclick="showAtRight('../list/base_admin?next=0');"> <i  class="iconfont icon-team" >&nbsp;</i>订单导出</a></li>
+
+<!--                 <li class="list-group-item"><a href="###" onclick="showAtRight('../parcel/list?pageNo=1');"> <i  class="iconfont icon-team" >&nbsp;</i>查看快递公司</a></li>-->
+          </ul>
+          </li> 
+          <li id="left_li_2" class="list-group-item" onclick="show_1()"><i  class="iconfont icon-plus-square" >&nbsp;&nbsp;</i><i id="menu_1">数据添加</i></li>
+            <li id="select_2" style="display:none;" class="list-group-item" >
+                <ul class="list-group">
+
+                   <li class="list-group-item"><a href="###" data-toggle="modal" data-target="#myModal1" ><i  class="iconfont icon-addteam" >&nbsp;</i>新增快递公司</a></li>
+                   <li class="list-group-item"><a href="###" data-toggle="modal" data-target="#myModal2"><i  class="iconfont icon-addteam" >&nbsp;</i>新增厂家</a></li>
+                   <li class="list-group-item"><a href="###" data-toggle="modal" data-target="#myModal3"><i  class="iconfont icon-tianjiabanji" >&nbsp;</i>新增商家</a></li>
+                   
+                </ul>
+            </li>
+
+     </ul> 
+                </div>
+                <div class=" col-sm-10">
+                <div class=" panel panel-success">
+                    <div class="panel-heading">
+                     <h3 class="panel-title">订 单 管 理 系 统</h3>
+                    </div>
+                          <div class=" panel-body scro" id="content">
+                
+                      
+                      <ul id="content02" class="list-group">
+       
+
+     <li   class="list-group-item"><i >历史订单总数</i><i style="color: red;font-weight: 700;" th:text="${ordersNumber}">1000</i>条</li>
+     <li   class="list-group-item"><i>今日订单总数</i><i style="color: red;font-weight: 700;"  th:text="${todayOrdersNumber}">1000</i>条</li>
+<li   class="list-group-item"><i>累计已发货订单总数</i><i style="color: red;font-weight: 700;" th:text="${sendOrdersNumber}">1000</i>条</li>
+<li   class="list-group-item"><i>累计未发货订单总数</i><i style="color: red;font-weight: 700;" th:text="${notSendOrdersNumber}">1000</i>条</li>
+ <li   class="list-group-item"><i>累计退货订单总数</i> <i style="color: red;font-weight: 700;" th:text="${returnedOrdersNumber}">1000</i>条</li>
+          
+                     </ul>
+               
+           
+               </div>
+
+                    <div class="panel-footer">
+                        <p class="text-primary" style="text-align:center;"><a rel="nofollow" href="http://www.beian.miit.gov.cn" target="_blank">陇ICP备19003156号</a></p>
+
+                    </div>
+
+                </div>  
+            </div>           
+            </div> 
+            
+      </div>
+     <div class="modal inmodal" id="myModal1" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+         <div class="modal-dialog">
+             <div class="modal-content animated bounceInRight">
+                 <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span>
+                     </button>
+                     <i class="fa fa-laptop modal-icon"></i>
+                     <h4 class="modal-title">新增快递公司</h4>
+                     <small class="font-bold"></small>
+                 </div><form action="#" id="form1">
+                 <div class="modal-body"><br>
+                     <div class="form-group">
+
+                             <h5>公司名称</h5><br/> <input type="text" name="name" placeholder="请输入公司名称" class="form-control">
+
+                     </div>
+                 </div>
+                 <div class="modal-footer">
+                     <button type="submit" class="btn btn-primary" >保存</button>
+                     <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                 </div></form>
+           </div><small class="font-bold">
+         </small></div><small class="font-bold">
+     </small></div>
+     <div class="modal inmodal" id="myModal2" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+         <div class="modal-dialog">
+             <div class="modal-content animated bounceInRight">
+                 <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span>
+                     </button>
+                     <i class="fa fa-laptop modal-icon"></i>
+                     <h4 class="modal-title">新增厂家</h4>
+                     <small class="font-bold"></small>
+                 </div><form action="#" id="form2">
+                 <div class="modal-body"><br>
+                     <div class="input-group">
+                         <span class="input-group-addon">用&nbsp;&nbsp;户&nbsp;&nbsp;名</span>
+                         <input type="text" class="form-control" name="username" required="required" placeholder="字母加数字组合" autofocus="autofocus">
+                     </div>
+                     <br>
+
+                     <div class="input-group">
+                         <span class="input-group-addon">昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称</span>
+                         <input type="text" class="form-control" name="name" required="required" autofocus="autofocus">
+                     </div>
+                     <br>
+                     <div class="input-group">
+                         <span class="input-group-addon">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码</span>
+                         <input type="password" id="ipwd1" class="form-control"  required="required" name="password">
+                     </div>
+                     <br>
+                     <div class="input-group">
+                         <span class="input-group-addon">确认密码</span>
+                         <input type="password" id="ipwd2" class="form-control"  required="required" >
+
+                     </div>
+                     <p id="msg_pwd1"></p>
+                     <br>
+                     <div class="input-group">
+                         <span class="input-group-addon">电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话</span>
+                         <input type="tel"  class="form-control"  required="required" name="phone">
+                     </div>
+                     <br>
+                     <div class="input-group">
+                         <span class="input-group-addon">身&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;份</span>
+                         <select name="type" class="form-control">
+
+                             <option value="factory">厂家</option>
+                         </select>
+                     </div>
+                     <br>
+                 </div>
+                 <div class="modal-footer">
+                     <button type="submit" class="btn btn-primary"  id="btn_register1" >保存</button>
+                     <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                 </div></form>
+             </div><small class="font-bold">
+         </small></div><small class="font-bold">
+     </small></div>
+     <div class="modal inmodal" id="myModal3" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+         <div class="modal-dialog">
+             <div class="modal-content animated bounceInRight">
+                 <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span>
+                     </button>
+                     <i class="fa fa-laptop modal-icon"></i>
+                     <h4 class="modal-title">新增商家</h4>
+                     <small class="font-bold"></small>
+                 </div><form action="#" id="form3">
+                 <div class="modal-body"><br>
+                     <div class="input-group">
+                         <span class="input-group-addon">用&nbsp;&nbsp;户&nbsp;&nbsp;名</span>
+                         <input type="text" class="form-control" name="username" required="required" placeholder="字母加数字组合" autofocus="autofocus">
+                     </div>
+                     <br>
+
+                     <div class="input-group">
+                         <span class="input-group-addon">昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称</span>
+                         <input type="text" class="form-control" name="name" required="required" autofocus="autofocus">
+                     </div>
+                     <br>
+                     <div class="input-group">
+                         <span class="input-group-addon">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码</span>
+                         <input type="password" id="ipwd3" class="form-control"  required="required" name="password">
+                     </div>
+                     <br>
+                     <div class="input-group">
+                         <span class="input-group-addon">确认密码</span>
+                         <input type="password" id="ipwd4" class="form-control"  required="required" >
+
+                     </div>
+                     <p id="msg_pwd2"></p>
+
+
+                     <br>
+                     <div class="input-group">
+                         <span class="input-group-addon">电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话</span>
+                         <input type="tel"  class="form-control"  required="required" name="phone">
+                     </div>
+                     <br>
+                     <div class="input-group">
+                         <span class="input-group-addon">身&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;份</span>
+                         <select name="type" class="form-control">
+
+                             <option value="business">商家</option>
+                         </select>
+                     </div>
+                     <br>
+
+
+                 </div>
+                 <div class="modal-footer">
+                     <button type="submit" id="btn_register2" class="btn btn-primary" >保存</button>
+                     <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                 </div></form>
+             </div><small class="font-bold">
+         </small></div><small class="font-bold">
+     </small></div>
+
+  </body>
+<script type="text/javascript">
+    $(document).ready(function ()
+    {
+        $("#form1").submit(function ()
+        {
+            $.ajax({
+                type: "POST",//方法类型
+                // dataType: "JSON",//预期服务器返回的数据类型
+                url: "../insert/parcel" ,//url
+                data: $('#form1').serialize(),
+                success: function (result) {
+                    alert("数据保存成功,请继续添加");
+                    document.getElementById("form1").reset();
+                    console.log(result);//打印服务端返回的数据(调试用)
+                    if (result.resultCode == 200) {
+                        alert("SUCCESS");
+                    }
+                    ;
+                },
+                error : function(result) {
+                    alert("数据录入出错");
+                }
+            });
+            //中间做一些ajax数据交互
+
+
+            return false;
+
+        });
+
+        $("#form2").submit(function ()
+        {
+            $.ajax({
+                type: "POST",//方法类型
+                // dataType: "JSON",//预期服务器返回的数据类型
+                url: "../insert/user" ,//url
+                data: $('#form2').serialize(),
+                success: function (result) {
+                    alert("数据保存成功,请继续添加");
+                    document.getElementById("form2").reset();
+                    console.log(result);//打印服务端返回的数据(调试用)
+                    if (result.resultCode == 200) {
+                        alert("SUCCESS");
+                    }
+                    ;
+                },
+                error : function(result) {
+                    alert("用户名已经存在或录入字段超过长度");
+                }
+            });
+            //中间做一些ajax数据交互
+
+            return false;
+
+        });
+
+
+        $("#form3").submit(function ()
+        {
+            $.ajax({
+                type: "POST",//方法类型
+                // dataType: "JSON",//预期服务器返回的数据类型
+                url: "../insert/user" ,//url
+                data: $('#form3').serialize(),
+                success: function (result) {
+                    alert("数据保存成功,请继续添加");
+                    document.getElementById("form3").reset();
+                    console.log(result);//打印服务端返回的数据(调试用)
+                    if (result.resultCode == 200) {
+                        alert("SUCCESS");
+                    }
+                    ;
+                },
+                error : function(result) {
+                    alert("用户名已经存在或录入字段超过长度");
+                }
+            });
+            //中间做一些ajax数据交互
+
+            return false;
+
+        });
+
+
+
+        $('#ipwd1').on('input propertychange', function() {
+            //input propertychange即实时监控键盘输入包括粘贴
+            var pwd = $.trim($(this).val());
+            //获取this，即ipwd的val()值，trim函数的作用是去除空格
+            var rpwd = $.trim($("#ipwd2").val());
+            if(rpwd!=""){
+                if(pwd==""&&rpwd==""){
+                    //若都为空，则提示密码不能为空，为了用户体验（在界面上用required同时做了处理）
+                    $("#msg_pwd1").html("<font color='red'>密码不能为空</font>");
+                }
+                else{
+                    if(pwd==rpwd){                                 //相同则提示密码匹配
+                        $("#msg_pwd1").html("<font color='green'>两次密码匹配通过</font>");
+                        $("#btn_register1").attr("disabled",false); //使按钮无法点击
+                    }else{                                          //不相同则提示密码匹配
+                        $("#msg_pwd1").html("<font color='red'>两次密码不匹配</font>");
+                        $("#btn_register1").attr("disabled",true);
+                    }
+                }}
+        })
+        $('#ipwd2').on('input propertychange', function() {
+            var pwd = $.trim($(this).val());
+            var rpwd = $.trim($("#ipwd1").val());
+            if(pwd==""&&rpwd==""){
+                $("#msg_pwd1").html("<font color='red'>密码不能为空</font>");
+            }
+            else{
+                if(pwd==rpwd){
+                    $("#msg_pwd1").html("<font color='green'>两次密码匹配通过</font>");
+                    $("#btn_register1").attr("disabled",false);
+                }else{
+                    $("#msg_pwd1").html("<font color='red'>两次密码不匹配</font>");
+                    $("#btn_register1").attr("disabled",true);
+                }
+            }
+        })
+
+        $('#ipwd3').on('input propertychange', function() {
+            //input propertychange即实时监控键盘输入包括粘贴
+            var pwd = $.trim($(this).val());
+            //获取this，即ipwd的val()值，trim函数的作用是去除空格
+            var rpwd = $.trim($("#ipwd4").val());
+            if(rpwd!=""){
+                if(pwd==""&&rpwd==""){
+                    //若都为空，则提示密码不能为空，为了用户体验（在界面上用required同时做了处理）
+                    $("#msg_pwd2").html("<font color='red'>密码不能为空</font>");
+                }
+                else{
+                    if(pwd==rpwd){                                 //相同则提示密码匹配
+                        $("#msg_pwd2").html("<font color='green'>两次密码匹配通过</font>");
+                        $("#btn_register2").attr("disabled",false); //使按钮无法点击
+                    }else{                                          //不相同则提示密码匹配
+                        $("#msg_pwd2").html("<font color='red'>两次密码不匹配</font>");
+                        $("#btn_register2").attr("disabled",true);
+                    }
+                }}
+        })
+        $('#ipwd4').on('input propertychange', function() {
+            var pwd = $.trim($(this).val());
+            var rpwd = $.trim($("#ipwd3").val());
+            if(pwd==""&&rpwd==""){
+                $("#msg_pwd2").html("<font color='red'>密码不能为空</font>");
+            }
+            else{
+                if(pwd==rpwd){
+                    $("#msg_pwd2").html("<font color='green'>两次密码匹配通过</font>");
+                    $("#btn_register2").attr("disabled",false);
+                }else{
+                    $("#msg_pwd2").html("<font color='red'>两次密码不匹配</font>");
+                    $("#btn_register2").attr("disabled",true);
+                }
+            }
+        })
+
+
+
+
+
+    });
+    function submitParcel() {
+        var name = document.getElementById('parcelName').value;
+
+
+        if (name == null || name == "") {
+            alert("没有输入任何信息");
+        } else {
+            var url = "../insert/parcel?name=" + name;
+            select(url);
+        }
+    }
+
+
+
+        function showModal(id) {
+            $.ajax({
+                url : "/orders/findOne",
+                async : true,
+                type : "GET",
+                data : {
+                    "type" : "query",
+                    "id" : id
+                },
+// 成功后开启模态框
+                success : showQuery,
+                error : function() {
+                    alert("请求失败");
+                },
+                dataType : "json"
+            });
+
+        }
+
+        function showQuery(data) {
+            $("#id").val(data.id);
+            $("#ordersDate").val(data.ordersDate);
+            $("#client").val(data.client);
+            $("#product").val(data.product);
+            $("#clientNote").val(data.clientNote);
+            $("#ordersRequire").val(data.ordersRequire);
+            $("#ordersNumber").val(data.ordersNumber);
+            $("#collect").val(data.collect);
+            $("#person").val(data.person);
+            $("#parcel").val(data.parcel);
+            $("#parcelNumber").val(data.parcelNumber);
+            $("#businessName").val(data.businessName);
+            $("#factoryNote").val(data.factoryNote);
+            $("#returns").val(data.returns);
+            $("#myModalUpdate").modal('show');
+        }
+
+
+</script>
+
+</html>

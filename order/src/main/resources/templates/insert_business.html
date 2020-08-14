@@ -1,0 +1,154 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"><html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>材料生成系统-班级录入</title>
+  <link rel="dao icon"  href="../img/favicon.ico" type="image-x.icon"/>
+  <link rel="stylesheet" type="text/css" href="../css/base.css">
+  <style type="text/css">
+
+  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="../js/base.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function ()
+    { 
+  $("#form3").submit(function () 
+        {
+             $.ajax({
+                type: "POST",//方法类型
+                   // dataType: "JSON",//预期服务器返回的数据类型
+                    url: "../insert/class_insert" ,//url
+                    data: $('#form3').serialize(),
+                    success: function (result) {
+                      alert("数据录入成功");
+                        console.log(result);//打印服务端返回的数据(调试用)
+                        if (result.resultCode == 200) {
+                            alert("SUCCESS");
+                        }
+                        ;
+                    },
+                    error : function() {
+                      alert("数据录入出错");
+                    }
+                });
+            //中间做一些ajax数据交互
+             
+             document.getElementById("form3").reset();
+             return false;
+         
+        });
+
+    })
+
+            $(document).ready(function(){
+                $('#ipwd').on('input propertychange', function() {
+                    //input propertychange即实时监控键盘输入包括粘贴
+                    var pwd = $.trim($(this).val());
+                    //获取this，即ipwd的val()值，trim函数的作用是去除空格
+                    var rpwd = $.trim($("#i2pwd").val());
+                    if(rpwd!=""){
+                        if(pwd==""&&rpwd==""){
+                            //若都为空，则提示密码不能为空，为了用户体验（在界面上用required同时做了处理）
+                            $("#msg_pwd").html("<font color='red'>密码不能为空</font>");
+                        }
+                        else{
+                            if(pwd==rpwd){                                 //相同则提示密码匹配
+                                $("#msg_pwd").html("<font color='green'>两次密码匹配通过</font>");
+                                $("#btn_register").attr("disabled",false); //使按钮无法点击
+                            }else{                                          //不相同则提示密码匹配
+                                $("#msg_pwd").html("<font color='red'>两次密码不匹配</font>");
+                                $("#btn_register").attr("disabled",true);
+                            }
+                        }}
+                })
+            })
+
+        //由于是两个输入框，所以进行两个输入框的几乎相同的判断
+        $(document).ready(function(){
+            $('#i2pwd').on('input propertychange', function() {
+                var pwd = $.trim($(this).val());
+                var rpwd = $.trim($("#ipwd").val());
+                if(pwd==""&&rpwd==""){
+                    $("#msg_pwd").html("<font color='red'>密码不能为空</font>");
+                }
+                else{
+                    if(pwd==rpwd){
+                        $("#msg_pwd").html("<font color='green'>两次密码匹配通过</font>");
+                        $("#btn_register").attr("disabled",false);
+                    }else{
+                        $("#msg_pwd").html("<font color='red'>两次密码不匹配</font>");
+                        $("#btn_register").attr("disabled",true);
+                    }
+                }
+            })
+        })
+    </script>
+</head>
+<body >
+<div class="container">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-offset-4 col-sm-4">
+                <div class="form-group">
+                    <h4>新增商家</h4>
+                        <br>
+                </div>
+            </div>
+        </div>
+        <div class="row ">
+            <div class=" col-sm-offset-4 col-sm-4">
+                <form id="form3" role="form" method="POST" action="#">
+                    <div class="input-group">
+                        <span class="input-group-addon">用&nbsp;&nbsp;户&nbsp;&nbsp;名</span>
+                        <input type="text" class="form-control" name="username" required="required" placeholder="字母加数字组合" autofocus="autofocus">
+                    </div>
+                    <br>
+
+                    <div class="input-group">
+                        <span class="input-group-addon">昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称</span>
+                        <input type="text" class="form-control" name="name" required="required" autofocus="autofocus">
+                    </div>
+                    <br>
+                    <div class="input-group">
+                        <span class="input-group-addon">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码</span>
+                        <input type="password" id="ipwd" class="form-control"  required="required" name="password">
+                    </div>
+                    <br>
+                    <div class="input-group">
+                        <span class="input-group-addon">确认密码</span>
+                        <input type="password" id="i2pwd" class="form-control"  required="required" >
+
+                    </div>
+                    <p id="msg_pwd"></p>
+                 
+                    
+                    <br>
+                    <div class="input-group">
+                        <span class="input-group-addon">身&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;份</span>
+                        <select name="sex" class="form-control">
+                        
+                            <option value="女">商家</option>
+                        </select>
+                    </div>
+                    <br>
+                    
+                    
+              
+                     <div class="input-group pull-right">
+            <button type="submit" class="btn btn-success form-control">submit</button>
+          </div>
+                    <br>
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

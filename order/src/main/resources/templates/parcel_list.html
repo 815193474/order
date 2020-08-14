@@ -1,0 +1,54 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="dao icon"  href="../img/favicon.ico" type="image-x.icon"/>
+	<link rel="stylesheet" type="text/css" href="../css/base.css">
+	<style type="text/css">
+
+	</style>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../js/base.js"></script>
+</head>
+<body>
+	
+	<div class="container">
+		<div class="container-fluid">
+			<div class="row">
+				<br>
+				<div class="col-sm-11 ">
+					<table class="table table-bordered table-hover">
+						<caption>快递公司信息</caption>
+	<br>
+						<thead>
+							<tr><td>公司名称</td><td>操作</td></tr>
+						</thead>
+						<tbody>
+						<tr th:each="p:${parcel}">
+							<td th:text="${p.name}"></td>
+
+							<td>
+								<a class="btn-sm btn-danger" th:onclick=showAtRight('../delete/parcel?name='+[[${p.name}]])>删除</a>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div></div>
+			<div class="row">
+				<div class="col-sm-6 col-sm-offset-4">
+					<br><br>
+					<ul class="pagination pull-left">
+						<li> <a   href="###" th:onclick=showAtRight('../parcel/list?pageNo='+[[${previousPageNo}]]) type="text/html">&laquo;</a> </li>
+						<li> <a  href="###" th:text="${totalPages}"></a></li>
+						<li> <a  href="###" th:text="${totalRecords}"></a></li>
+						<li> <a  href="###" th:onclick=showAtRight('../parcel/list?pageNo='+[[${nextPageNo}]]) type="text/html">&raquo;</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
